@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
+import { usePaper } from '@/context/PaperContext';
 
 interface ChatMessage {
   id: string;
@@ -30,53 +31,84 @@ export default function ChatPanel({ paperTitle, isOpen, onClose }: ChatPanelProp
     },
   ]);
   const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { paperData } = usePaper();
 
-  const handleSend = useCallback(() => {
-    if (!inputValue.trim()) return;
+  const sendMessage = async (text: string) => {
+    if (!text.trim() || isLoading) return;
 
     const userMsg: ChatMessage = {
       id: `user-${Date.now()}`,
       role: 'user',
-      content: inputValue.trim(),
+      content: text,
     };
 
-    const assistantMsg: ChatMessage = {
-      id: `assistant-${Date.now()}`,
+    const loadingId = `loading-${Date.now()}`;
+    const loadingMsg: ChatMessage = {
+      id: loadingId,
       role: 'assistant',
-      content: `Thanks for your question about "${inputValue.trim()}". This is a demo response — AI integration is coming soon! I'll be able to provide ${mode === 'beginner' ? 'simplified, easy-to-understand' : 'detailed, technical'} answers about this paper.`,
+      content: 'Thinking...',
     };
 
-    setMessages((prev) => [...prev, userMsg, assistantMsg]);
-    setInputValue('');
+    setMessages((prev) => [...prev, userMsg, loadingMsg]);
+    setIsLoading(true);
 
-    // Scroll to bottom after next render
     setTimeout(() => {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, 50);
-  }, [inputValue, mode]);
 
-  const handleSmartEntry = useCallback(
-    (prompt: string) => {
-      const userMsg: ChatMessage = {
-        id: `user-${Date.now()}`,
-        role: 'user',
-        content: prompt,
-      };
+    try {
+      const paperContent = paperData?.sections.map(s => `${s.heading}\n${s.content}`).join('\n\n') || '';
+      
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: text,
+          mode,
+          paperContent,
+        }),
+      });
 
-      const assistantMsg: ChatMessage = {
-        id: `assistant-${Date.now()}`,
-        role: 'assistant',
-        content: `Great question! I'd love to help you with "${prompt}". This is a preview — full AI-powered responses are being built. Stay tuned!`,
-      };
+      if (!res.ok) {
+        throw new Error('API Error');
+      }
 
-      setMessages((prev) => [...prev, userMsg, assistantMsg]);
-
+      const data = await res.json();
+      
+      setMessages((prev) => prev.map(msg => 
+        msg.id === loadingId 
+          ? { ...msg, id: `assistant-${Date.now()}`, content: data.reply }
+          : msg
+      ));
+    } catch (err) {
+      console.error(err);
+      setMessages((prev) => prev.map(msg => 
+        msg.id === loadingId 
+          ? { ...msg, id: `assistant-${Date.now()}`, content: "Sorry, I encountered an error. Please try again later." }
+          : msg
+      ));
+    } finally {
+      setIsLoading(false);
       setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       }, 50);
+    }
+  };
+
+  const handleSend = useCallback(() => {
+    if (!inputValue.trim()) return;
+    const text = inputValue.trim();
+    setInputValue('');
+    sendMessage(text);
+  }, [inputValue, mode, paperData, isLoading]);
+
+  const handleSmartEntry = useCallback(
+    (prompt: string) => {
+      sendMessage(prompt);
     },
-    []
+    [mode, paperData, isLoading]
   );
 
   const handleKeyDown = useCallback(
@@ -232,7 +264,7 @@ export default function ChatPanel({ paperTitle, isOpen, onClose }: ChatPanelProp
             />
             <button
               onClick={handleSend}
-              disabled={!inputValue.trim()}
+              disabled={!inputValue.trim() || isLoading}
               className={`
                 w-8 h-8 rounded-lg flex items-center justify-center
                 transition-all duration-200 cursor-pointer flex-shrink-0
