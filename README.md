@@ -1,8 +1,23 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Eido: Research Paper Companion
+
+## What I Built
+Eido is an intelligent, context-aware research paper reading environment built with Next.js. It allows users to upload PDF research papers and parses the document text directly in the browser. 
+
+Once a paper is loaded, the application provides a three-panel interface:
+1. A navigation sidebar linking to extracted sections.
+2. A clean, distraction-free document viewer.
+3. An AI-powered research assistant chatbot.
+
+The chatbot is strictly grounded in the content of the uploaded paper. It offers two distinct modes: "Beginner" (providing simplified explanations and analogies) and "Technical" (delivering precise, domain-specific insights). This allows users to query complex concepts natively while avoiding generalized AI hallucinations. 
+
+## Why I Built It
+I picked this topic because I recently read the original Apache Kafka research paper. I spent a significant amount of time trying to understand the paper in depth, break down its architecture, and summarize its overarching contributions. 
+
+Going through that intensive learning process made me realize how valuable it would be to have a dedicated, focused tool designed specifically for exploring and querying dense academic literature. Eido was built to solve the exact problem of actively parsing, understanding, and breaking down tough research papers seamlessly.
 
 ## Getting Started
 
-First, run the development server:
+To run the development server locally:
 
 ```bash
 npm run dev
@@ -10,27 +25,6 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Ensure you have your environment variables configured (e.g., `OPENROUTER` key) to enable the AI assistant functionality. Open http://localhost:3000 in your browser to start exploring papers.
