@@ -24,10 +24,6 @@ To run the development server locally:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
 Ensure you have your environment variables configured (e.g., `OPENROUTER` key) to enable the AI assistant functionality. Open http://localhost:3000 in your browser to start exploring papers.
