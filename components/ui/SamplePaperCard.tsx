@@ -8,6 +8,7 @@ export interface SamplePaper {
   title: string;
   pages: number;
   image: string;
+  fileUrl?: string;
 }
 
 interface SamplePaperCardProps {

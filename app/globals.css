@@ -32,10 +32,8 @@ body {
   font-family: var(--font-sans), "Inter", system-ui, -apple-system, sans-serif;
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
+/* Smooth scrolling — applied per-element, not globally on html
+   Next.js warns about smooth scroll on <html> conflicting with route transitions */
 
 /* Upload zone animations */
 @keyframes dash-march {
@@ -45,9 +43,12 @@ html {
 }
 
 @keyframes float-up {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-6px);
   }
@@ -60,7 +61,7 @@ html {
 /* Card hover lift */
 .sample-card {
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sample-card:hover {
@@ -87,4 +88,108 @@ html {
 .drag-active {
   background: #eff6ff !important;
   border-color: #93c5fd !important;
+}
+
+/* ─── Research View Styles ─── */
+
+/* Custom scrollbar for sidebar & chat */
+.sidebar-scrollbar::-webkit-scrollbar,
+.chat-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-track,
+.chat-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-thumb,
+.chat-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-thumb:hover,
+.chat-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Document viewer scrollbar */
+.document-viewer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.document-viewer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.document-viewer::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+
+.document-viewer::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+/* Sidebar nav item hover micro-interaction */
+.sidebar-nav-item {
+  position: relative;
+}
+
+.sidebar-nav-item::after {
+  content: "";
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #475569;
+  transition: transform 0.2s ease;
+}
+
+.sidebar-nav-item:hover::after {
+  transform: translateY(-50%) scale(1);
+}
+
+/* Smart entry button subtle arrow */
+.smart-entry-btn {
+  position: relative;
+  padding-right: 2rem;
+}
+
+.smart-entry-btn::after {
+  content: "→";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%) translateX(-4px);
+  opacity: 0;
+  transition: all 0.2s ease;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.smart-entry-btn:hover::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Text selection styling for research content */
+.document-viewer ::selection {
+  background: #dbeafe;
+  color: #1e293b;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
 }

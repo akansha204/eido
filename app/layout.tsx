@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Libre_Baskerville, Inter } from "next/font/google";
+import { PaperProvider } from "@/context/PaperContext";
 import "./globals.css";
 
 const libreBaskerville = Libre_Baskerville({
@@ -32,7 +33,9 @@ export default function RootLayout({
       className={`${libreBaskerville.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-white text-slate-800 font-sans">
-        {children}
+        <PaperProvider>
+          {children}
+        </PaperProvider>
       </body>
     </html>
   );
