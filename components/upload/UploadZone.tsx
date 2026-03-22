@@ -9,7 +9,7 @@ interface UploadZoneProps {
 
 export default function UploadZone({
   onFileSelect,
-  acceptedFormats = ['PDF', 'EPUB'],
+  acceptedFormats = ['PDF'],
 }: UploadZoneProps) {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -70,10 +70,9 @@ export default function UploadZone({
         relative flex flex-col items-center justify-center
         py-14 px-8 rounded-lg cursor-pointer
         border-2 border-dashed transition-all duration-300
-        ${
-          isDragging
-            ? 'border-blue-400 bg-blue-50'
-            : 'border-slate-300 bg-slate-50/50 hover:border-slate-400 hover:bg-slate-50'
+        ${isDragging
+          ? 'border-blue-400 bg-blue-50'
+          : 'border-slate-300 bg-slate-50/50 hover:border-slate-400 hover:bg-slate-50'
         }
       `}
       onDragOver={handleDragOver}
@@ -93,9 +92,8 @@ export default function UploadZone({
         `}
       >
         <svg
-          className={`w-7 h-7 text-slate-500 transition-transform duration-500 ${
-            isDragging ? '-translate-y-1' : ''
-          }`}
+          className={`w-7 h-7 text-slate-500 transition-transform duration-500 ${isDragging ? '-translate-y-1' : ''
+            }`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
