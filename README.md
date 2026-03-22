@@ -1,5 +1,8 @@
 # Eido: Research Paper Companion
 
+![Landing Page](public/landing-page.png)
+![Research Page](public/research-page.png)
+
 ## What I Built
 Eido is an intelligent, context-aware research paper reading environment built with Next.js. It allows users to upload PDF research papers and parses the document text directly in the browser. 
 
